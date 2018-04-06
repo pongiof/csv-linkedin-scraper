@@ -12,9 +12,11 @@ TIME_TO_SLEEP = 5
 
 def pause(driver):
     print('Pause fetching for ' + str(TIME_TO_SLEEP) + ' seconds')
-    driver.get('http://www.google.com/')
-    element = WebDriverWait(driver, 10).until(EC.title_contains('Google'))
-    time.sleep(TIME_TO_SLEEP * 6) # 6 times the standard time.
+    try:
+        driver.get('http://www.google.com/')
+        element = WebDriverWait(driver, 10).until(EC.title_contains('Google'))
+    finally:
+        time.sleep(TIME_TO_SLEEP * 6) # 6 times the standard time.
 
 def processProfile(driver, data, index, pause_cnt):
     if pause_cnt and index % pause_cnt == 0:
@@ -105,6 +107,7 @@ def main(argv):
     for index, row in enumerate(profiles):
         output.extend(processProfile(driver, row, index + 1, pause_cnt))
         time.sleep(TIME_TO_SLEEP) # Always sleep a bit between one profile and another.
+        print(str(output))
     # Create output
     with open(outputfile, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=' ')
