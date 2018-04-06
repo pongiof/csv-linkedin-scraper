@@ -45,6 +45,7 @@ def processProfile(driver, data, index, pause_cnt):
     except:
         e = sys.exc_info()[0]
         print('Error processing ' + str(data[0]) + ' error: ' + str(e))
+        csv_output.append([data[0], 'error', e])
         pass
     return csv_output
 

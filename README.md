@@ -16,4 +16,4 @@ The code uses:
 `scrappy.py -i <inputfile> -o <outputfile> -u <user> -p <password>`
 
 - By default open Chrome browser, use `-j` option to use headless Chrome driver.
-- use `-n <count>` to pause scraping every **<count>** profiles.
+- Use `-n <count>` to pause scraping every **<count>** profiles.
