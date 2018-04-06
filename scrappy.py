@@ -33,11 +33,13 @@ def processProfile(driver, data, index):
                 w.to_date])
             csv_output.append(new_row)
     except:
-        print('Error processing ' + str(data[0]))
+        e = sys.exc_info()[0]
+        print('Error processing ' + str(data[0]) + ' error: ' + str(e))
         pass
     return csv_output
 
 def login(user, password, headless):
+    print('Logging into Linkedin...')
     options = webdriver.ChromeOptions()
     if headless:
         options.add_argument('headless')
@@ -81,7 +83,7 @@ def main(argv):
         profiles = list(reader)
     profile_num = len(profiles)
     print('Processing ' + str(profile_num) + ' profiles')
-    for index, row in profiles:
+    for index, row in enumerate(profiles):
         output.extend(processProfile(driver, row, index))
 
     with open(outputfile, 'w', newline='') as csvfile:
