@@ -15,4 +15,4 @@ The code uses:
 
 `scrappy.py -i <inputfile> -o <outputfile> -u <user> -p <password>`
 
-By default render the Chrome brwoser, use `-j` option to use headless Chrome driver.
+By default open Chrome browser, use `-j` option to use headless Chrome driver.
