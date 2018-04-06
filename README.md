@@ -1,8 +1,8 @@
 # csv-linkedin-scraper
 
-Given an input CSV with a list of Linkedin profile URLs, scrapes education and work experience and outputs it into an output CSV.
+Given an input CSV with a list of Linkedin profile URLs, scrapes education and work experience and dumps the data into an output CSV.
 
-The input CSV must contain the profile URLs in the first column, the other column will be preserved in output CSV.
+The input CSV must contain the profile URLs in the first column, any other column will be copied in the output CSV.
 
 ## Dependencies
 
