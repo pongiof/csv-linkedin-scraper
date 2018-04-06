@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys, getopt, csv
+import sys, getopt, csv, time
 from selenium import webdriver
 from linkedin_scraper import Person
 from selenium.webdriver.common.by import By
@@ -8,7 +8,17 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def processProfile(driver, data, index):
+TIME_TO_SLEEP = 20
+
+def pause(driver):
+    print('Pause fetching for ' + str(TIME_TO_SLEEP) + ' seconds')
+    driver.get('http://www.google.com/')
+    element = WebDriverWait(driver, 10).until(EC.title_contains('Google'))
+    time.sleep(TIME_TO_SLEEP)
+
+def processProfile(driver, data, index, pause_cnt):
+    if index % pause_cnt == 0:
+        pause(driver)
     csv_output = []
     try:
         print('Processing profile ' + str(index) + ' ... ' + str(data[0]))
@@ -57,10 +67,11 @@ def login(user, password, headless):
     return driver
 
 def main(argv):
-    usage = 'scrappy.py -i <inputfile> -o <outputfile> -u <user> -p <password> [-j]'
+    usage = 'scrappy.py -i <inputfile> -o <outputfile> -u <user> -p <password> [-j] [-n <count>]'
     headless = False
+    pause_cnt = 0
     try:
-        opts, args = getopt.getopt(argv,"hji:o:u:p:")
+        opts, args = getopt.getopt(argv,"hjn:i:o:u:p:")
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
@@ -77,7 +88,11 @@ def main(argv):
         elif opt == '-p':
             password = arg
         elif opt == '-j':
+            # Chrome will be in headless mode
             headless = True
+        elif opt == '-n':
+            # Add a pause every <count> profiles to avoid throttling by Linkedin
+            pause_cnt = int(arg)
     driver = login(user, password, headless)
     output = []
     # Process input
@@ -87,7 +102,7 @@ def main(argv):
     profile_num = len(profiles)
     print('Processing ' + str(profile_num) + ' profiles')
     for index, row in enumerate(profiles):
-        output.extend(processProfile(driver, row, index))
+        output.extend(processProfile(driver, row, index + 1, pause_cnt))
     # Create output
     with open(outputfile, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=' ')
