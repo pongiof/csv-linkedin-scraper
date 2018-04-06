@@ -17,7 +17,7 @@ def pause(driver):
     time.sleep(TIME_TO_SLEEP)
 
 def processProfile(driver, data, index, pause_cnt):
-    if index % pause_cnt == 0:
+    if pause_cnt and index % pause_cnt == 0:
         pause(driver)
     csv_output = []
     try:
